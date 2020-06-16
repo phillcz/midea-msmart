@@ -101,24 +101,6 @@ class device:
 
 class air_conditioning_device(device):
 
-    class fan_speed_enum(Enum):
-        Auto = 102
-        High = 80
-        Medium = 60
-        Low = 40
-        Silent = 20
-
-        @staticmethod
-        def list():
-            return list(map(lambda c: c.name, air_conditioning_device.fan_speed_enum))
-
-        @staticmethod
-        def get(value):
-            if(value in air_conditioning_device.fan_speed_enum._value2member_map_):
-                return air_conditioning_device.fan_speed_enum(value)
-            _LOGGER.debug("Unknown Fan Speed: {}".format(value))
-            return air_conditioning_device.fan_speed_enum.Auto
-
     class operational_mode_enum(Enum):
         auto = 1
         cool = 2
@@ -160,7 +142,7 @@ class air_conditioning_device(device):
         self._power_state = False
         self._target_temperature = 17.0
         self._operational_mode = air_conditioning_device.operational_mode_enum.auto
-        self._fan_speed = air_conditioning_device.fan_speed_enum.Auto
+        self._fan_speed = 102 #Auto
         self._swing_mode = air_conditioning_device.swing_mode_enum.Off
         self._eco_mode = False
         self._turbo_mode = False
@@ -194,7 +176,7 @@ class air_conditioning_device(device):
             cmd.power_state = self._power_state
             cmd.target_temperature = self._target_temperature
             cmd.operational_mode = self._operational_mode.value
-            cmd.fan_speed = self._fan_speed.value
+            cmd.fan_speed = self._fan_speed
             cmd.swing_mode = self._swing_mode.value
             cmd.eco_mode = self._eco_mode
             cmd.turbo_mode = self._turbo_mode
@@ -221,8 +203,7 @@ class air_conditioning_device(device):
         self._target_temperature = res.target_temperature
         self._operational_mode = air_conditioning_device.operational_mode_enum.get(
             res.operational_mode)
-        self._fan_speed = air_conditioning_device.fan_speed_enum.get(
-            res.fan_speed)
+        self._fan_speed = res.fan_speed
         self._swing_mode = air_conditioning_device.swing_mode_enum.get(
             res.swing_mode)
         self._eco_mode = res.eco_mode
@@ -277,7 +258,7 @@ class air_conditioning_device(device):
         return self._fan_speed
 
     @fan_speed.setter
-    def fan_speed(self, speed: fan_speed_enum):
+    def fan_speed(self, speed: int):
         if self._updating:
             self._defer_update = True
         self._fan_speed = speed
