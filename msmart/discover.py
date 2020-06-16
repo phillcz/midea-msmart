@@ -1,4 +1,3 @@
-import click
 import logging
 import socket
 import sys
@@ -29,10 +28,6 @@ BROADCAST_MSG = bytearray([
     0x56, 0x9e, 0xb8, 0xec, 0x91, 0x8e, 0x92, 0xe5
 ])
 
-
-@click.command()
-@click.option("-d", "--debug", default=False, count=True)
-# @click.pass_context
 def discover(debug: int):
     """Discover Midea Devices with UDP Broadcast"""
     if debug:
@@ -94,7 +89,3 @@ def remove_duplicates(device_list: list):
         if i not in newlist:
             newlist.append(i)
     return newlist
-
-
-# if __name__ == '__main__':
-#     discover()

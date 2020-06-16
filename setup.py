@@ -21,6 +21,7 @@ setuptools.setup(
     ],
     entry_points='''
         [console_scripts]
-        midea-discover=msmart.cli:discover
+        midea-discover=msmart.discover:discover
+        midea-cli=msmart.cliapp:main
     ''',
 )
